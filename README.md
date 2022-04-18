@@ -72,15 +72,15 @@ pip install “git+https://github.com/philferriere/cocoapi.git#egg=pycocotools&s
 pip install opencv-python
 ```
 
-detectron2_for_windowsをclone
+- detectron2_for_windowsをclone
 ```
 git clone https://github.com/naokiwakata/detectron2_for_local.git
 ```
-作業フォルダをdetectron2-windowsに移動
+- 作業フォルダをdetectron2-windowsに移動
 ```
 cd detectron2-windows
 ```
-detectron2をclone
+- detectron2をclone
 ```
 git clone https://github.com/facebookresearch/detectron2.git
 ```
