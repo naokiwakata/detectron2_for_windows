@@ -10,10 +10,10 @@ Detectron2とはFacebook AIが開発した、PyTorchベースの物体検出の�
 - 全体の流れ  
 https://qiita.com/bear_montblanc/items/5bb1ad3506718120682d
 
-- coco-anotatorの使い方  
+- coco-anotatorの使い方(学習のためのアノテーションはCOCO形式である必要がある)  
 https://qiita.com/PoodleMaster/items/39830656d69d34a39f34
 
-- Dockerインストール  
+- Dockerインストール(coco-anotatorを使用するためにDockerが必要)  
 https://docs.docker.jp/docker-for-windows/install.html  
 https://chigusa-web.com/blog/windows%E3%81%ABdocker%E3%82%92%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%81%97%E3%81%A6python%E7%92%B0%E5%A2%83%E3%82%92%E6%A7%8B%E7%AF%89/  
 https://qiita.com/PoodleMaster/items/75edc1744b0a4986c1c8  
