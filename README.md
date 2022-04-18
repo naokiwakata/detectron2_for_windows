@@ -24,3 +24,73 @@ https://zenn.dev/kathmandu/articles/4a86c3d75b93c3
 [自作](https://colab.research.google.com/drive/1XLbOV9x-MQo__WdDnQLxxN0IGJqx4lsE?hl=ja#scrollTo=eeK_hvuzlPtV)
 
 ## 環境構築 
+https://medium.com/@yogeshkumarpilli/how-to-install-detectron2-on-windows-10-or-11-2021-aug-with-the-latest-build-v0-5-c7333909676f
+
+こちらの記事を参考にWindowsでdetectron2を動かす
+- Anacondaをインストール  
+https://www.python.jp/install/anaconda/windows/install.html  
+condaコマンドが使えることを確認
+```
+conda info
+```
+- 記事のCUDAインストールはスキップ（GPUを使用しないため)  
+
+- conda環境を作る
+```
+conda create -n detectron2(名前はなんでもok) python=3.7
+```
+
+- conda環境に移動
+```
+conda activate detectron2
+```
+
+- PyTorchをインストール(バージョンは変えない方が良いかも。以下のバージョンを僕は入れました)
+```
+pip install torch==1.10.0
+```
+```
+pip install torchaudio==0.10.0
+```
+```
+pip install torchvision==0.11.1
+```
+- Microsoft Visual Studioを最新にする？（記事要参照）  
+C++関連でエラーが出た気がする。それが最新にしたことで解消された  
+https://self-development.info/%E3%80%8Cmicrosoft-visual-c-14-0-or-greater-is-required-%E3%80%8D%E3%81%8C%E5%87%BA%E3%81%9F%E5%A0%B4%E5%90%88%E3%81%AE%E5%AF%BE%E5%87%A6%E6%96%B9%E6%B3%95/
+
+- CythonとPycocotoolsをインストール
+```
+pip install cython
+```
+```
+pip install “git+https://github.com/philferriere/cocoapi.git#egg=pycocotools&subdirectory=PythonAPI"
+```
+
+- OpenCVをインストール
+```
+pip install opencv-python
+```
+
+detectron2_for_windowsをclone
+```
+git clone https://github.com/naokiwakata/detectron2_for_local.git
+```
+作業フォルダをdetectron2-windowsに移動
+```
+cd detectron2-windows
+```
+detectron2をclone
+```
+git clone https://github.com/facebookresearch/detectron2.git
+```
+もしくは自分のリポジトリにforkしてきたdetectron2をclone
+```
+git clone https://github.com/naokiwakata/detectron2.git
+```
+```
+python -m pip install -e detectron2
+```
+
+これで動かせるはず！！！！
+
