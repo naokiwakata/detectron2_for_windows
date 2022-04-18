@@ -14,27 +14,27 @@ https://github.com/facebookresearch/detectron2
 
 ##### 参考記事
 - 全体の流れ  
-https://qiita.com/bear_montblanc/items/5bb1ad3506718120682d
+[Detectron2で小銭を数える](https://qiita.com/bear_montblanc/items/5bb1ad3506718120682d)
 
 - coco-anotatorの使い方(学習のためのアノテーションはCOCO形式である必要がある)  
-https://qiita.com/PoodleMaster/items/39830656d69d34a39f34
+[【coco-annotaror】アノテーションツール](https://qiita.com/PoodleMaster/items/39830656d69d34a39f34)
 
 - Dockerインストール(coco-anotatorを使用するためにDockerが必要)  
-https://docs.docker.jp/docker-for-windows/install.html  
-https://chigusa-web.com/blog/windows%E3%81%ABdocker%E3%82%92%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%81%97%E3%81%A6python%E7%92%B0%E5%A2%83%E3%82%92%E6%A7%8B%E7%AF%89/  
-https://qiita.com/PoodleMaster/items/75edc1744b0a4986c1c8  
-https://zenn.dev/kathmandu/articles/4a86c3d75b93c3
+[Windows に Docker Desktop をインストール](https://docs.docker.jp/docker-for-windows/install.html)  
+[【Docker Desktop】Windowsにインストール（WSL2）](https://chigusa-web.com/blog/windows%E3%81%ABdocker%E3%82%92%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%81%97%E3%81%A6python%E7%92%B0%E5%A2%83%E3%82%92%E6%A7%8B%E7%AF%89/)  
+[【Docker超入門】WSL2とDockerを使ってwebサーバ（nginx）を立ち上げよう](https://qiita.com/PoodleMaster/items/75edc1744b0a4986c1c8)  
+[wsl上のubuntuでdockerが使用できない](https://zenn.dev/kathmandu/articles/4a86c3d75b93c3)
 
 - GoogleColabratory  
 [公式](https://colab.research.google.com/drive/16jcaJoc6bCFAQ96jDe2HwtXj7BMD_-m5)  
 [自作](https://colab.research.google.com/drive/1XLbOV9x-MQo__WdDnQLxxN0IGJqx4lsE?hl=ja#scrollTo=eeK_hvuzlPtV)
 
 ## detectron2をWindwos上で動かすための環境構築 
-https://medium.com/@yogeshkumarpilli/how-to-install-detectron2-on-windows-10-or-11-2021-aug-with-the-latest-build-v0-5-c7333909676f
+[How to Install Detectron2 on Windows 10 or 11 –2021(AUG) with the latest build(v0.5).](https://medium.com/@yogeshkumarpilli/how-to-install-detectron2-on-windows-10-or-11-2021-aug-with-the-latest-build-v0-5-c7333909676f)
 
 こちらの記事を参考にWindowsでdetectron2を動かす
 - Anacondaをインストール  
-https://www.python.jp/install/anaconda/windows/install.html  
+[Windows版Anacondaのインストール](https://www.python.jp/install/anaconda/windows/install.html)  
 condaコマンドが使えることを確認
 ```
 conda info
@@ -63,7 +63,7 @@ pip install torchvision==0.11.1
 ```
 - Microsoft Visual Studioを最新にする？（記事要参照）  
 C++関連でエラーが出た気がする。それが最新にしたことで解消された  
-https://self-development.info/%E3%80%8Cmicrosoft-visual-c-14-0-or-greater-is-required-%E3%80%8D%E3%81%8C%E5%87%BA%E3%81%9F%E5%A0%B4%E5%90%88%E3%81%AE%E5%AF%BE%E5%87%A6%E6%96%B9%E6%B3%95/
+[「Microsoft Visual C++ 14.0 or greater is required.」が出た場合の対処方法](https://self-development.info/%E3%80%8Cmicrosoft-visual-c-14-0-or-greater-is-required-%E3%80%8D%E3%81%8C%E5%87%BA%E3%81%9F%E5%A0%B4%E5%90%88%E3%81%AE%E5%AF%BE%E5%87%A6%E6%96%B9%E6%B3%95/)
 
 - CythonとPycocotoolsをインストール
 ```
