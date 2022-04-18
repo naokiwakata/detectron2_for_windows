@@ -4,7 +4,13 @@
 ## Detectron2とは
 https://github.com/facebookresearch/detectron2
 
-Detectron2とはFacebook AIが開発した、PyTorchベースの物体検出のライブラリです。 様々なモデルとそのPre-Trainedモデルが実装されており、下記のように、Bounding boxやInstance Segmentation等の物体検出を簡単に実装することができます。
+> Detectron2とはFacebook AIが開発した、PyTorchベースの物体検出のライブラリです。 様々なモデルとそのPre-Trainedモデルが実装されており、下記のように、Bounding boxやInstance Segmentation等の物体検出を簡単に実装することができます。
+
+## 流れ
+1. データセットの収集（coco-anotatorでアノテーションを行う）
+2. 学習（GoogleColaboratory上で学習し,学習モデル(pthファイル)を保存）
+3. 検証（GoogleColaboratory上で上手くいくか検証）
+4. 保存した学習モデルをWindows上で動かす。
 
 ##### 参考記事
 - 全体の流れ  
@@ -23,7 +29,7 @@ https://zenn.dev/kathmandu/articles/4a86c3d75b93c3
 [公式](https://colab.research.google.com/drive/16jcaJoc6bCFAQ96jDe2HwtXj7BMD_-m5)  
 [自作](https://colab.research.google.com/drive/1XLbOV9x-MQo__WdDnQLxxN0IGJqx4lsE?hl=ja#scrollTo=eeK_hvuzlPtV)
 
-## 環境構築 
+## detectron2をWindwos上で動かすための環境構築 
 https://medium.com/@yogeshkumarpilli/how-to-install-detectron2-on-windows-10-or-11-2021-aug-with-the-latest-build-v0-5-c7333909676f
 
 こちらの記事を参考にWindowsでdetectron2を動かす
@@ -80,7 +86,8 @@ git clone https://github.com/naokiwakata/detectron2_for_local.git
 ```
 cd detectron2-windows
 ```
-- detectron2をclone
+
+- detectron2をclone(detectron2がcloneされていればスキップ)
 ```
 git clone https://github.com/facebookresearch/detectron2.git
 ```
