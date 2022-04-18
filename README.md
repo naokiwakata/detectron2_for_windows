@@ -80,6 +80,15 @@ git clone https://github.com/naokiwakata/detectron2_for_local.git
 ```
 cd detectron2-windows
 ```
+
+- detectron2をclone(detectron2がcloneされていればスキップ)
+```
+git clone https://github.com/facebookresearch/detectron2.git
+```
+もしくは自分のリポジトリにforkしてきたdetectron2をclone
+```
+git clone https://github.com/naokiwakata/detectron2.git
+```
 ```
 python -m pip install -e detectron2
 ```
