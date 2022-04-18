@@ -1,4 +1,4 @@
-# Detectron2をローカルで動かす（植物の検出）
+# Detectron2をWindowsで動かす（植物の検出）
 <img src="https://user-images.githubusercontent.com/65523426/163788316-8fbcf0de-49df-472c-853c-faedb6d83151.png" width="500">
 
 ## Detectron2とは
