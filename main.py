@@ -30,7 +30,7 @@ def main():
     predictor = DefaultPredictor(cfg)
 
     # 予測および表示
-    imagePath = "C:\\Users\\wakanao\\detectron2-windows\\images\\9_11 (2).JPG"
+    imagePath = "images\\9_11 (2).JPG"
     img = cv2.imread(imagePath)
 
     outputs = predictor(img)
