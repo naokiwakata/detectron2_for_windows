@@ -10,7 +10,7 @@ from detectron2.data import MetadataCatalog
 from detectron2.utils.visualizer import Visualizer
 
 
-class Predictor:
+class LeafPredictor:
     _metadata = None
     _predictor = None
     _outputs = None

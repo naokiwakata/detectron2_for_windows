@@ -1,10 +1,10 @@
 import cv2
 import sys
-from domain.predictor import Predictor
+from domain.leaf_predictor import LeafPredictor
 
 
 def loadVideo():
-    predictor = Predictor()
+    predictor = LeafPredictor()
     cap = cv2.VideoCapture('leaf_sample2.mov')
     height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
     width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
