@@ -1,6 +1,7 @@
 import cv2
 
-def processImage(outputs,img):
+
+def processImage(outputs, img):
     boxes = outputs["instances"].pred_boxes
     tensor = boxes.tensor
     number_box = boxes.tensor.shape[0]

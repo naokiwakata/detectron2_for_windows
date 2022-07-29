@@ -1,2 +1,6 @@
 .vscode
-model_final.pth
+*.pth
+*.jpg
+detectron2
+*.mov
+*.pyc
