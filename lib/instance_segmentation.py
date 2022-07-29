@@ -4,7 +4,7 @@ from fileEnum import File
 from processImage import processImage
 from predictor import Predictor
 import numpy as np
-from util import shaveOff
+from shaveOff import shaveOff
 import glob
 
 def instanceSegmentation():
@@ -39,12 +39,3 @@ def instanceSegmentation():
     width = image_size[1]
 
     predictor.showPredictImage(img=img, outputs=outputs)
-
-    file = File.Image
-    #file = File.Video
-
-    if file == File.Image:
-        #processImage(outputs=outputs, img=img)
-        print(file)
-    elif file == File.Video:
-        print(file)
