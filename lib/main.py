@@ -1,5 +1,5 @@
-from instance_segmentation import instanceSegmentation
-from video import loadVideo
+from presentation.instance_segmentation import instanceSegmentation
+from presentation.video import loadVideo
 
 def main():
     #loadVideo()

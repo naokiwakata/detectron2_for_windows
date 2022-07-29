@@ -1,6 +1,6 @@
 import cv2
 import sys
-from predictor import Predictor
+from domain.predictor import Predictor
 
 
 def loadVideo():

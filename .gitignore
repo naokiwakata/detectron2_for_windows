@@ -4,3 +4,4 @@
 detectron2
 *.mov
 *.pyc
+*.nnp
