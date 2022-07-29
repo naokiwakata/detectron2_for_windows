@@ -28,7 +28,7 @@ class Predictor:
             "COCO-InstanceSegmentation\\mask_rcnn_R_50_FPN_3x.yaml"))
         cfg.MODEL.ROI_HEADS.NUM_CLASSES = 1  # 1クラスのみ
         cfg.MODEL.WEIGHTS = os.path.join(
-            cfg.OUTPUT_DIR, "C:\\Users\\wakanao\\projects\\detectron2-windows\\model_final2.pth")  # 絶対パスでなければならないっぽい
+            cfg.OUTPUT_DIR, "C:\\Users\\wakanao\\projects\\detectron2-windows\\model\\model_final2.pth")  # 絶対パスでなければならないっぽい
         cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.6
         cfg.MODEL.DEVICE = "cpu"
 
