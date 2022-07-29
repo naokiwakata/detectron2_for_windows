@@ -15,14 +15,14 @@ def instanceSegmentation():
 
     outputs = predictor.predict(img=img)
 
-    jpgs = glob.glob('testDataLeaf\\*.jpg')
-    for imagePath in jpgs:
-        img = cv2.imread(imagePath)  # <class 'numpy.ndarray'>
-        outputs = predictor.predict(img=img)
-        fields = outputs['instances'].get_fields()
-        pred_boxes = fields['pred_boxes']
-        print(len(pred_boxes))
-        predictor.showPredictImage(img=img, outputs=outputs)
+    # jpgs = glob.glob('testDataLeaf\\*.jpg')
+    # for imagePath in jpgs:
+    #     img = cv2.imread(imagePath)  # <class 'numpy.ndarray'>
+    #     outputs = predictor.predict(img=img)
+    #     fields = outputs['instances'].get_fields()
+    #     pred_boxes = fields['pred_boxes']
+    #     print(len(pred_boxes))
+    #     predictor.showPredictImage(img=img, outputs=outputs)
 
 
 
