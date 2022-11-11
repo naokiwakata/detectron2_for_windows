@@ -12,7 +12,6 @@ def instanceSegmentation():
     #imagePath = "images\910 (1)_23.png"
     img = cv2.imread(imagePath)  # <class 'numpy.ndarray'>
 
-
     # 病気判別：CNN
     diseasePredictor = DiseasePredictor()
 
@@ -21,13 +20,16 @@ def instanceSegmentation():
     leaf_outputs = leafPredictor.predict(img=img)
 
     criped_imgs = cripBackground(outputs=leaf_outputs, img=img)
-    print(f"検出枚数： {len(criped_imgs)}") 
+    print(f"検出枚数： {len(criped_imgs)}")
     for criped_img in criped_imgs:
         # 一枚ごとに病気を判定
         result = diseasePredictor.predict(img=criped_img)
         print(result)
         cv2.imshow('only leaf', criped_img)
         cv2.waitKey(0)
+
+    # 判別精度を高める
+    # 画像にラベル付けして表示したい
 
     # jpgs = glob.glob('testDataLeaf\\*.jpg')
     # for imagePath in jpgs:

@@ -1,5 +1,26 @@
 import cv2
 import numpy as np
+import glob
+from domain.leaf_predictor import LeafPredictor
+import os
+
+def crip():
+    # 葉っぱ検出：インスタンスセグメンテーション
+    leafPredictor = LeafPredictor()
+    path = "C:\\Users\\wakanao\\Desktop\\dataset\\*\\disease\\*.png"
+    img_paths = glob.glob(path)
+
+    save_folder = "C:\\Users\\wakanao\\Desktop\\dataset\\disease_no_background\\"
+    #save_folder = "C:\\Users\\wakanao\\Desktop\\dataset\\health_no_background\\"
+    for img_path in img_paths:
+        filename = os.path.splitext(os.path.basename(img_path))[0]
+        img = cv2.imread(img_path) 
+        leaf_outputs = leafPredictor.predict(img=img)
+        leafPredictor.showPredictImage(img=img,outputs=leaf_outputs)
+        criped_imgs = cripBackground(outputs=leaf_outputs,img=img)
+
+        for index, criped_img in enumerate(criped_imgs):
+            cv2.imwrite(save_folder + filename + "_" +str(index) + ".png", criped_img)
 
 
 def cripBackground(outputs, img):

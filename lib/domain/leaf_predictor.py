@@ -1,6 +1,6 @@
 import os
 import cv2
-import numpy
+import numpy as np
 from detectron2.engine import DefaultPredictor
 from detectron2.config import get_cfg
 from detectron2 import model_zoo
@@ -28,7 +28,7 @@ class LeafPredictor:
             "COCO-InstanceSegmentation\\mask_rcnn_R_50_FPN_3x.yaml"))
         cfg.MODEL.ROI_HEADS.NUM_CLASSES = 1  # 1クラスのみ
         cfg.MODEL.WEIGHTS = os.path.join(
-            cfg.OUTPUT_DIR, "C:\\Users\\wakanao\\projects\\detectron2-windows\\model\\model_final2.pth")  # 絶対パスでなければならないっぽい
+            cfg.OUTPUT_DIR, "C:\\Users\\wakanao\\projects\\detectron2-windows\\model\\rgb_segment_model.pth")  # 絶対パスでなければならないっぽい
         cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.6
         cfg.MODEL.DEVICE = "cpu"
 
@@ -54,7 +54,28 @@ class LeafPredictor:
         img = cv2.resize(img, (width, height))
         cv2.imshow('image', img)
         cv2.waitKey(0)
-
+    
+    # Visualizerを使わずに自分で検出を画像に描画する
+    def showPredictImg(self,img,outputs):
+        # Prepare
+        fields = outputs['instances'].get_fields()
+        pred_boxes = fields['pred_boxes']
+        np_boxes = pred_boxes.tensor.to('cpu').detach().numpy().astype(np.int32)
+        # Draw Predited Rectangle
+        for box in np_boxes:
+            x1 = box[0]
+            y1 = box[1]
+            x2 = box[2]
+            y2 = box[3]
+            cv2.rectangle(img, (x1,y1), (x2, y2), (255, 0, 0), thickness=5)
+        # Resize
+        height = int(img.shape[0]/5)
+        width = int(img.shape[1]/5)
+        img = cv2.resize(img, (width, height))
+        # Show Image
+        cv2.imshow('image', img)
+        cv2.waitKey(0)
+            
     def getPredictImage(self, img, outputs):
         v = Visualizer(img[:, :, ::-1],
                        metadata=self._metadata,

@@ -6,3 +6,5 @@ detectron2
 *.pyc
 *.nnp
 *.png
+*.tif
+*.mp4
