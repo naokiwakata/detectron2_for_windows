@@ -29,7 +29,9 @@ def segment_rgb_img():
             for x in range(x1, x2):
                 isLeaf = pred_mask[y, x]
                 if(isLeaf != True):
-                    img[y, x] = (0,0,0)
+                    img[y, x] = (0,0,0) # 背景を黒く落とす
+        # box内の画像を機械学習にかけて判別させる
+
         # Draw Predicted Rectrangle
         cv2.rectangle(img, (x1,y1), (x2, y2), (255, 0, 0), thickness=5)
     # Resize
