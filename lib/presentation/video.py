@@ -2,6 +2,7 @@ import cv2
 import sys
 from domain.leaf_predictor import LeafPredictor
 
+### 動画を読み込むやつ
 
 def loadVideo():
     predictor = LeafPredictor()

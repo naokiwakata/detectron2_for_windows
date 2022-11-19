@@ -1,5 +1,6 @@
 import cv2
 
+### インスタンスセグメンテーションで切り抜いた画像を表示するやつ
 
 def processImage(outputs, img):
     boxes = outputs["instances"].pred_boxes

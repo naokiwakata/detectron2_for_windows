@@ -9,7 +9,8 @@ class DiseasePredictor:
 
     def __init__(self):
         # モデル読み込み
-        nnp = nnp_graph.NnpLoader('model\\results.nnp')
+        model_path = "model\disease_crimination.nnp"
+        nnp = nnp_graph.NnpLoader(model_path)
 
         # 推論用ニューラルネットワークを取得
         graph = nnp.get_network('MainRuntime', batch_size=1)

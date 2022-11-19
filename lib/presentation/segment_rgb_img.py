@@ -1,16 +1,20 @@
 import cv2
 import numpy as np
-import glob
 from domain.leaf_predictor import LeafPredictor
-import os
+from domain.disease_predictor import DiseasePredictor
+
+### RGB画像から葉を検出
+### 1枚1枚の病気健康を判別したい
 
 def segment_rgb_img():
     # 葉っぱ検出：インスタンスセグメンテーション
     leafPredictor = LeafPredictor()
+    diseasePredictor = DiseasePredictor()
     img_path = "D:\\wakata_research\\2022\\RGBs\\36-40\\IMG_1537.JPG"
-    img = cv2.imread(img_path) 
+    original_img = cv2.imread(img_path)  #判別に回す画像
+    draw_img = cv2.imread(img_path) #描画する画像
 
-    leaf_outputs = leafPredictor.predict(img=img)
+    leaf_outputs = leafPredictor.predict(img=original_img)
     #box内の背景を落とす
     # Prepare
     fields = leaf_outputs['instances'].get_fields()
@@ -24,21 +28,32 @@ def segment_rgb_img():
         y1 = box[1]
         x2 = box[2]
         y2 = box[3]
-        # Drop Img Not Leaf
+        
+        cutOutImg = np.zeros((y2-y1+10, x2-x1+10, 3), np.uint8)
+        # 葉1枚ずつ病気か健康を判別させる
         for y in range(y1, y2):
             for x in range(x1, x2):
                 isLeaf = pred_mask[y, x]
-                if(isLeaf != True):
-                    img[y, x] = (0,0,0) # 背景を黒く落とす
-        # box内の画像を機械学習にかけて判別させる
+                if(isLeaf):
+                    cutOutImg[y-y1,x-x1]=original_img[y,x]
 
-        # Draw Predicted Rectrangle
-        cv2.rectangle(img, (x1,y1), (x2, y2), (255, 0, 0), thickness=5)
+        # 病気or健康の予測
+        predict = diseasePredictor.predict(img=cutOutImg)
+
+        # 画像に書き込み
+        color = None
+        if predict > 0.5: # health
+            color = (0, 255, 0) #Green
+        else:             # disease
+            color = (0, 0, 255) #Red
+        # 短径描画
+        cv2.rectangle(draw_img, (x1,y1), (x2, y2), color, thickness=5)
+    
     # Resize
-    height = int(img.shape[0]/5)
-    width = int(img.shape[1]/5)
-    img = cv2.resize(img, (width, height))
+    height = int(draw_img.shape[0]/5)
+    width = int(draw_img.shape[1]/5)
+    draw_img = cv2.resize(draw_img, (width, height))
     # Show Image
-    cv2.imshow('image', img)
-    cv2.waitKey(0)    
+    cv2.imshow('image', draw_img)
+    cv2.waitKey(0)      
 

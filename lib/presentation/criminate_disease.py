@@ -2,6 +2,8 @@ import cv2
 from nnabla.utils import nnp_graph
 from nnabla.utils.image_utils import imread
 
+### 病気判別のデモ
+
 def criminate_disease():
     # 学習済みニューラルネットワークの読み込み
     model_path = "model\disease_crimination.nnp"

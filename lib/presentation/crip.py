@@ -4,6 +4,8 @@ import glob
 from domain.leaf_predictor import LeafPredictor
 import os
 
+## 背景を落とした画像を保存するやつ？
+
 def crip():
     # 葉っぱ検出：インスタンスセグメンテーション
     leafPredictor = LeafPredictor()

@@ -5,6 +5,7 @@ from domain.disease_predictor import DiseasePredictor
 from presentation.shaveOff import shaveOff
 from presentation.crip import cripBackground
 
+### インスタンスセグメンテーションして色々やってるやつ
 
 def instanceSegmentation():
     # 画像読み込み

@@ -6,7 +6,7 @@ from presentation.criminate_disease import criminate_disease
 import cv2
 
 def main():
-    criminate_disease()
+    segment_rgb_img()
 
 if __name__ == "__main__":
     main()

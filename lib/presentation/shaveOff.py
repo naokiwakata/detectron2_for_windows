@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 
+### 葉っぱ1枚1枚を表示？
 
 def shaveOff(outputs, img):
 
