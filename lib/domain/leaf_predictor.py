@@ -75,7 +75,26 @@ class LeafPredictor:
         # Show Image
         cv2.imshow('image', img)
         cv2.waitKey(0)
-            
+
+    # Visualizerを使わずに自分で検出を画像に描画する
+    def getPredictedImg(self,img,outputs):
+        # Prepare
+        fields = outputs['instances'].get_fields()
+        pred_boxes = fields['pred_boxes']
+        np_boxes = pred_boxes.tensor.to('cpu').detach().numpy().astype(np.int32)
+        # Draw Predited Rectangle
+        for box in np_boxes:
+            x1 = box[0]
+            y1 = box[1]
+            x2 = box[2]
+            y2 = box[3]
+            cv2.rectangle(img, (x1,y1), (x2, y2), (255, 0, 0), thickness=3)
+        # Resize
+        height = int(img.shape[0]/5)
+        width = int(img.shape[1]/5)
+        img = cv2.resize(img, (width, height))
+        return img
+
     def getPredictImage(self, img, outputs):
         v = Visualizer(img[:, :, ::-1],
                        metadata=self._metadata,
