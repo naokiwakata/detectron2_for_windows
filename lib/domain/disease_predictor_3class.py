@@ -2,7 +2,7 @@ from nnabla.utils import nnp_graph
 import cv2
 
 
-class DiseasePredictor:
+class Disease3ClassPredictor:
     _predictor = None
     _x = None
     _y = None
@@ -10,7 +10,7 @@ class DiseasePredictor:
     def __init__(self):
         # モデル読み込み
         
-        model_path = "model\disease_crimination.nnp"
+        model_path = "model//3classes.nnp"
         nnp = nnp_graph.NnpLoader(model_path)
 
         # 推論用ニューラルネットワークを取得
