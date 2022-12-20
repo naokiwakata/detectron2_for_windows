@@ -47,6 +47,15 @@ def loadVideo():
 
     cv2.destroyWindow(window_name)
 
+
+def boxesForTracking(boxes):
+    bboxes = []
+    for box in boxes:
+        bbox = [box[0],box[1],box[2]-box[0],box[3]-box[1]]
+        bboxes.append(bbox)
+    return bboxes
+
+
 def trackBox():
     leafPredictor = LeafPredictor()
     video_path = 'video\IMG_6825.MOV'
@@ -62,15 +71,24 @@ def trackBox():
         sys.exit()
 
     tracker = cv2.legacy.TrackerMedianFlow_create()
+    tracker2 = cv2.legacy.TrackerMedianFlow_create()
+    tracker3 = cv2.legacy.TrackerMedianFlow_create()
+
     # Read the first frame
     ok, frame = cap.read()
     outputs = leafPredictor.predict(img=frame)
     first_img = leafPredictor.getPredictedImg(img=frame,outputs=outputs)
 
     bounding_boxes = outputs["instances"].pred_boxes.tensor.tolist()
+    bounding_boxes = boxesForTracking(bounding_boxes)
     first_bbox = bounding_boxes[0]
-    first_bbox = [first_bbox[0],first_bbox[1],first_bbox[2]-first_bbox[0],first_bbox[3]-first_bbox[1]]
     ok = tracker.init(frame, first_bbox)
+
+    second_bbox = bounding_boxes[1]
+    ok = tracker2.init(frame, second_bbox)
+
+    second_bbox = bounding_boxes[2]
+    ok = tracker3.init(frame, second_bbox)
 
     cv2.imshow('first_img', first_img)
     cv2.waitKey(0)   
@@ -85,7 +103,19 @@ def trackBox():
         
         # Update the tracker
         ok, bbox = tracker.update(frame)
-        
+        # Draw the bounding box on the frame
+        if ok:
+            p1 = (int(bbox[0]), int(bbox[1]))
+            p2 = (int(bbox[0] + bbox[2]), int(bbox[1] + bbox[3]))
+            cv2.rectangle(frame, p1, p2, (255,0,0), 2, 1)
+
+        ok, bbox = tracker2.update(frame)       
+        # Draw the bounding box on the frame
+        if ok:
+            p1 = (int(bbox[0]), int(bbox[1]))
+            p2 = (int(bbox[0] + bbox[2]), int(bbox[1] + bbox[3]))
+            cv2.rectangle(frame, p1, p2, (255,0,0), 2, 1)
+        ok, bbox = tracker3.update(frame)       
         # Draw the bounding box on the frame
         if ok:
             p1 = (int(bbox[0]), int(bbox[1]))
@@ -99,4 +129,63 @@ def trackBox():
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-    cv2.destroyWindow(window_name)
+def boxesForTracking(boxes):
+    bboxes = []
+    for box in boxes:
+        bbox = [box[0],box[1],box[2]-box[0],box[3]-box[1]]
+        bboxes.append(bbox)
+    return bboxes
+
+def trackBoxes():
+    leafPredictor = LeafPredictor()
+    video_path = 'video\IMG_6825.MOV'
+    
+    cap = cv2.VideoCapture(video_path)
+    height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+    width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+
+    if not cap.isOpened():
+        sys.exit()
+
+    ok, frame = cap.read()
+    # 複数のBoundingBoxに対するTrackerの箱を用意
+    trackers = []
+    i = 0 
+    while True:
+        # Read a frame from the video stream
+        ok, frame = cap.read()
+        
+        # Check if the frame is valid
+        if not ok:
+            break
+        
+        if i%15 == 0: # あるフレームごとに葉っぱを検出しなおす
+            # 最初のイニシャライズもここでやる（i == 0）
+            outputs = leafPredictor.predict(img=frame)
+            bounding_boxes = outputs["instances"].pred_boxes.tensor.tolist()
+            bounding_boxes = boxesForTracking(bounding_boxes)
+            trackers.clear()
+            for box in bounding_boxes:
+                tracker = cv2.legacy.TrackerMedianFlow_create()
+                ok = tracker.init(frame,box)
+                trackers.append(tracker)  
+            print('re:detectReaf')
+      
+        for tracker in trackers:
+                # Update the tracker
+                ok, bbox = tracker.update(frame)
+                # Draw the bounding box on the frame
+                if ok:
+                    p1 = (int(bbox[0]), int(bbox[1]))
+                    p2 = (int(bbox[0] + bbox[2]), int(bbox[1] + bbox[3]))
+                    cv2.rectangle(frame, p1, p2, (255,0,0), 2, 1)
+
+        # Display the frame
+        frame = cv2.resize(frame, (int(width/3), int(height/3)))
+        cv2.imshow("Tracking", frame)
+        
+        # Break the loop if the user presses the 'q' key
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+        i = i+1
