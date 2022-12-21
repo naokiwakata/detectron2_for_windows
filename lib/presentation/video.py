@@ -63,16 +63,11 @@ def trackBox():
     cap = cv2.VideoCapture(video_path)
     height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
     width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
-    fps = cap.get(cv2.CAP_PROP_FPS)
-    delay = 1
-    window_name = 'frame'
-
+    
     if not cap.isOpened():
         sys.exit()
 
     tracker = cv2.legacy.TrackerMedianFlow_create()
-    tracker2 = cv2.legacy.TrackerMedianFlow_create()
-    tracker3 = cv2.legacy.TrackerMedianFlow_create()
 
     # Read the first frame
     ok, frame = cap.read()
@@ -180,37 +175,6 @@ def trackBoxes():
     out.release()
     cv2.destroyAllWindows()
 
-def saveVideo():
-    # 動画を読み込む
-    cap = cv2.VideoCapture("video//IMG_6825.MOV")
-
-    # 動画のパラメータを指定する
-    fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v') # mp4形式を指定
-    fps = cap.get(cv2.CAP_PROP_FPS)
-    size = (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
-
-    # 出力用の動画を作成する
-    out = cv2.VideoWriter('video//new.mp4', fourcc, fps, size)
-    # 動画をフレームごとに処理する
-    while True:
-        # フレームを読み込む
-        ok, frame = cap.read()
-        
-        # フレームが有効であるか確認
-        if not ok:
-            break
-        
-        # フレームをグレースケールに変換する
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        cv2.imshow('gray',frame)
-        
-        # 変換されたフレームを保存する
-        out.write(gray)
-
-    # 出力用の動画をリリースする
-    out.release()
-    cap.release()
-    print('finish')
 
 def loadVideo():
     leafPredictor = LeafPredictor()
