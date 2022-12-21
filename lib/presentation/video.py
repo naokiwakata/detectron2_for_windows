@@ -119,6 +119,15 @@ def trackBoxes():
     height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
     width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
 
+    # 動画のパラメータを指定する
+    fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v') # mp4形式を指定
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    size = (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
+
+    # 出力用の動画を作成する
+    # isColor=Falseと定義しなければ上手く保存されない（https://plugout.hateblo.jp/entry/2020/01/10/085552）
+    out = cv2.VideoWriter('video//new.mp4', fourcc, fps, size,isColor=False)
+
     if not cap.isOpened():
         sys.exit()
 
@@ -156,14 +165,20 @@ def trackBoxes():
                     cv2.rectangle(frame, p1, p2, (255,0,0), 2, 1)
 
         # Display the frame
-        frame = cv2.resize(frame, (int(width/3), int(height/3)))
-        cv2.imshow("Tracking", frame)
-        
+        showFlame = cv2.resize(frame, (int(width/3), int(height/3)))
+        cv2.imshow("Tracking", showFlame)
+
+        # 変換されたフレームを保存する
+        out.write(frame)
+
         # Break the loop if the user presses the 'q' key
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
         i = i+1
+    cap.release()
+    out.release()
+    cv2.destroyAllWindows()
 
 def saveVideo():
     # 動画を読み込む
@@ -176,7 +191,6 @@ def saveVideo():
 
     # 出力用の動画を作成する
     out = cv2.VideoWriter('video//new.mp4', fourcc, fps, size)
-
     # 動画をフレームごとに処理する
     while True:
         # フレームを読み込む
@@ -199,7 +213,7 @@ def saveVideo():
     print('finish')
 
 def loadVideo():
-    print(cv2)
+    leafPredictor = LeafPredictor()
     # 動画を読み込む
     cap = cv2.VideoCapture("video//IMG_6825.MOV")
 
@@ -209,9 +223,10 @@ def loadVideo():
     size = (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
 
     # 出力用の動画を作成する
-    # isColor=Falseと定義しなければ上手く保存されない（https://plugout.hateblo.jp/entry/2020/01/10/085552）
-    out = cv2.VideoWriter('video//new.mp4', fourcc, fps, size,isColor=False)
+    out = cv2.VideoWriter('video//new.mp4', fourcc, fps, size,isColor=True)
 
+    trackers = []
+    i = 0 
     # 動画をフレームごとに処理する
     while True:
         # フレームを読み込む
@@ -221,16 +236,38 @@ def loadVideo():
         if not ok:
             print('not ok')
             break
-        
-        # フレームをグレースケールに変換する
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        cv2.imshow('load',gray)
+                # Update the tracker
+        if i%7 == 0: # あるフレームごとに葉っぱを検出しなおす
+            # 最初のイニシャライズもここでやる（i == 0）
+            outputs = leafPredictor.predict(img=frame)
+            bounding_boxes = outputs["instances"].pred_boxes.tensor.tolist()
+            bounding_boxes = boxesForTracking(bounding_boxes)
+            trackers.clear()
+            for box in bounding_boxes:
+                tracker = cv2.legacy.TrackerMedianFlow_create()
+                ok = tracker.init(frame,box)
+                trackers.append(tracker)  
+            print('re:detectReaf')
+      
+        for tracker in trackers:
+                # Update the tracker
+                ok, bbox = tracker.update(frame)
+                # Draw the bounding box on the frame
+                if ok:
+                    p1 = (int(bbox[0]), int(bbox[1]))
+                    p2 = (int(bbox[0] + bbox[2]), int(bbox[1] + bbox[3]))
+                    cv2.rectangle(frame, p1, p2, (255,0,0), 2, 1)
+
+        cv2.imshow('load',frame)
         # 変換されたフレームを保存する
-        out.write(gray)
+        out.write(frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-    
+        
+        i = i + 1
+            
     cap.release()
     out.release()
     cv2.destroyAllWindows()
     print('Finish')
+    print(i)
