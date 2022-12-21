@@ -81,13 +81,14 @@ def trackBoxes():
     size = (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
     out = cv2.VideoWriter('video//new.mp4', fourcc, fps, size,isColor=True)
 
-    trackers = [] #複数の葉をトラッキングするための箱
-    leafStates = []
+    # trackerとleafStateを管理する箱
+    trackerAndLeafStates = {}
     i = 0 # フレーム数
 
     while True:
         # フレームを読み込む
-        ok, frame = cap.read()
+        ok, original_frame = cap.read()
+        show_frame = np.copy(original_frame)
         
         # フレームが有効であるか確認
         if not ok:
@@ -96,17 +97,15 @@ def trackBoxes():
 
         if i%7 == 0: # あるフレームごとに葉っぱを検出しなおす
             # 最初のイニシャライズもここでやる（i == 0）
-            outputs = leafPredictor.predict(img=frame) #葉を検出
+            outputs = leafPredictor.predict(img=original_frame) #葉を検出
             bounding_boxes = outputs["instances"].pred_boxes.tensor.tolist()
             bounding_boxes = boxesForTracking(bounding_boxes)
-            trackers.clear() # Trackerをリセットする（検出精度の向上も兼ねる）
-            leafStates.clear()
+            trackerAndLeafStates.clear()
 
             # BoundingBoxごとにTrackerをイニシャライズ
             for box in bounding_boxes:
                 tracker = cv2.legacy.TrackerMedianFlow_create()
-                ok = tracker.init(frame,box)
-                trackers.append(tracker)  
+                ok = tracker.init(original_frame,box)
 
                 x1 = int(box[0])
                 y1 = int(box[1])
@@ -117,7 +116,7 @@ def trackBoxes():
                 # 葉1枚ずつ病気か健康を判別させる
                 for y in range(y1, y2):
                     for x in range(x1, x2):
-                        cutOutImg[y-y1,x-x1]=frame[y,x]
+                        cutOutImg[y-y1,x-x1]=original_frame[y,x]
 
                 # 病気or健康の予測
                 predict = diseasePredictor.predict(img=cutOutImg)
@@ -129,28 +128,26 @@ def trackBoxes():
                     leafState = LeafState.HEALTH
                 elif max_index == 2: # 病害後期
                     leafState = LeafState.LATERDISEASE    
-                print(leafState)
-                leafStates.append(leafState)
+                trackerAndLeafStates[tracker] = leafState
             print('detect leaf')
       
-        # 検出した葉ごとに短径を描画
-        for index,tracker in enumerate(trackers):
+        for tracker, leafState in trackerAndLeafStates.items():
                 # Update the tracker
-                ok, bbox = tracker.update(frame)
+                ok, bbox = tracker.update(original_frame)
 
                 # 短径描画
                 if ok:
                     p1 = (int(bbox[0]), int(bbox[1]))
                     p2 = (int(bbox[0] + bbox[2]), int(bbox[1] + bbox[3]))
-                    color = leafStates[index].value
-                    cv2.rectangle(frame, p1, p2, color, 2, 1)
-
+                    color = leafState.value
+                    # 画像の書き込みはshow_frameに行う
+                    cv2.rectangle(show_frame, p1, p2, color, 2, 1)            
         # 表示
-        showingFrame = cv2.resize(frame, (int(width/3), int(height/3)))
-        cv2.imshow('load',showingFrame)
+        show_frame = cv2.resize(show_frame, (int(width/3), int(height/3)))
+        cv2.imshow('load',show_frame)
 
         # 変換されたフレームを保存
-        out.write(frame)
+        out.write(original_frame)
 
         # Qキーでストップ
         if cv2.waitKey(1) & 0xFF == ord('q'):
