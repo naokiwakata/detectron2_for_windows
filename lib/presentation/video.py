@@ -84,12 +84,6 @@ def trackBox():
     first_bbox = bounding_boxes[0]
     ok = tracker.init(frame, first_bbox)
 
-    second_bbox = bounding_boxes[1]
-    ok = tracker2.init(frame, second_bbox)
-
-    second_bbox = bounding_boxes[2]
-    ok = tracker3.init(frame, second_bbox)
-
     cv2.imshow('first_img', first_img)
     cv2.waitKey(0)   
 
@@ -109,18 +103,6 @@ def trackBox():
             p2 = (int(bbox[0] + bbox[2]), int(bbox[1] + bbox[3]))
             cv2.rectangle(frame, p1, p2, (255,0,0), 2, 1)
 
-        ok, bbox = tracker2.update(frame)       
-        # Draw the bounding box on the frame
-        if ok:
-            p1 = (int(bbox[0]), int(bbox[1]))
-            p2 = (int(bbox[0] + bbox[2]), int(bbox[1] + bbox[3]))
-            cv2.rectangle(frame, p1, p2, (255,0,0), 2, 1)
-        ok, bbox = tracker3.update(frame)       
-        # Draw the bounding box on the frame
-        if ok:
-            p1 = (int(bbox[0]), int(bbox[1]))
-            p2 = (int(bbox[0] + bbox[2]), int(bbox[1] + bbox[3]))
-            cv2.rectangle(frame, p1, p2, (255,0,0), 2, 1)
         # Display the frame
         frame = cv2.resize(frame, (int(width/3), int(height/3)))
         cv2.imshow("Tracking", frame)
@@ -128,13 +110,6 @@ def trackBox():
         # Break the loop if the user presses the 'q' key
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-
-def boxesForTracking(boxes):
-    bboxes = []
-    for box in boxes:
-        bbox = [box[0],box[1],box[2]-box[0],box[3]-box[1]]
-        bboxes.append(bbox)
-    return bboxes
 
 def trackBoxes():
     leafPredictor = LeafPredictor()
@@ -189,3 +164,73 @@ def trackBoxes():
             break
 
         i = i+1
+
+def saveVideo():
+    # 動画を読み込む
+    cap = cv2.VideoCapture("video//IMG_6825.MOV")
+
+    # 動画のパラメータを指定する
+    fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v') # mp4形式を指定
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    size = (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
+
+    # 出力用の動画を作成する
+    out = cv2.VideoWriter('video//new.mp4', fourcc, fps, size)
+
+    # 動画をフレームごとに処理する
+    while True:
+        # フレームを読み込む
+        ok, frame = cap.read()
+        
+        # フレームが有効であるか確認
+        if not ok:
+            break
+        
+        # フレームをグレースケールに変換する
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        cv2.imshow('gray',frame)
+        
+        # 変換されたフレームを保存する
+        out.write(gray)
+
+    # 出力用の動画をリリースする
+    out.release()
+    cap.release()
+    print('finish')
+
+def loadVideo():
+    print(cv2)
+    # 動画を読み込む
+    cap = cv2.VideoCapture("video//IMG_6825.MOV")
+
+    # 動画のパラメータを指定する
+    fourcc = cv2.VideoWriter_fourcc(*'XVID')# mp4形式を指定
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    size = (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)), int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
+
+    # 出力用の動画を作成する
+    # isColor=Falseと定義しなければ上手く保存されない（https://plugout.hateblo.jp/entry/2020/01/10/085552）
+    out = cv2.VideoWriter('video//new.mp4', fourcc, fps, size,isColor=False)
+
+    # 動画をフレームごとに処理する
+    while True:
+        # フレームを読み込む
+        ok, frame = cap.read()
+        
+        # フレームが有効であるか確認
+        if not ok:
+            print('not ok')
+            break
+        
+        # フレームをグレースケールに変換する
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        cv2.imshow('load',gray)
+        # 変換されたフレームを保存する
+        out.write(gray)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+    
+    cap.release()
+    out.release()
+    cv2.destroyAllWindows()
+    print('Finish')
